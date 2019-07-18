@@ -14,12 +14,12 @@
  * Available GPIO ports. Not all may be valid for the system! Read the datasheet
  */
 typedef enum GPIOPort {
-	GPIO_PORT_A = 0,
-	GPIO_PORT_B,
-	GPIO_PORT_C,
-	GPIO_PORT_D,
-	GPIO_PORT_E, //does not exist on stm32f0!
-	GPIO_PORT_F
+  GPIO_PORT_A = 0,
+  GPIO_PORT_B,
+  GPIO_PORT_C,
+  GPIO_PORT_D,
+  GPIO_PORT_E, //does not exist on stm32f0!
+  GPIO_PORT_F
 } GPIOPort;
 
 typedef uint8_t GPIOPinNum;
@@ -29,37 +29,37 @@ typedef uint8_t GPIOPinNum;
  * Use the ALT modes if the GPIO pin is being used for another purpose, such as SPI, I2C, etc..
  */
 typedef enum GPIOMode {
-	GPIO_INPUT = 0,
-	GPIO_OUTPUT, //output push-pull
-	GPIO_OUTPUT_OD, //output open-drain
-	GPIO_ALT_PP, //alternate push-pull
-	GPIO_ALT_OD //alternate open-drain
+  GPIO_INPUT = 0,
+  GPIO_OUTPUT, //output push-pull
+  GPIO_OUTPUT_OD, //output open-drain
+  GPIO_ALT_PP, //alternate push-pull
+  GPIO_ALT_OD //alternate open-drain
 } GPIOMode;
 
 /**
  * State of the pin. Only valid if its an output. High or Low
  */
 typedef enum GPIOState {
-	GPIO_STATE_LOW = 0,
-	GPIO_STATE_HIGH
+  GPIO_STATE_LOW = 0,
+  GPIO_STATE_HIGH
 } GPIOState;
 
 /**
  * Internal pull-up/pull-down resistor state of the pin
  */
 typedef enum GPIOResistorState {
-	GPIO_RES_NONE = 0,
-	GPIO_RES_PULLUP,
-	GPIO_RES_PULLDOWN
+  GPIO_RES_NONE = 0,
+  GPIO_RES_PULLUP,
+  GPIO_RES_PULLDOWN
 } GPIOResistorState;
 
 /**
  * Low speeds for regular GPIO functions. High speeds when they're used for interfaces like SPI, I2C, etc..
  */
 typedef enum GPIOSpeed {
-	GPIO_SPEED_LOW = 1,
-	GPIO_SPEED_MED,
-	GPIO_SPEED_HIGH
+	GPIO_FREQ_LOW = 1,
+	GPIO_FREQ_MED,
+	GPIO_FREQ_HIGH
 } GPIOSpeed;
 
 /**
@@ -85,7 +85,7 @@ class GPIOPin {
 			GPIOMode mode,
 			GPIOState initial_state,
 			GPIOResistorState resistor_state = GPIO_RES_NONE,
-			GPIOSpeed speed = GPIO_SPEED_LOW,
+			GPIOSpeed speed = GPIO_FREQ_LOW,
 			uint8_t alternate_function = 0);
 	/**
 	 * Initializes the GPIO with the HAL appropriately
@@ -120,11 +120,11 @@ class GPIOPin {
 	StatusCode reset();
 
  private:
-	GPIOState current_state;
-	GPIOMode mode;
-	GPIOPort port;
-	GPIOPinNum num;
-	GPIOResistorState resistor_state;
-	GPIOSpeed speed;
-	uint8_t alternate_function;
+  GPIOState current_state;
+  GPIOMode mode;
+  GPIOPort port;
+  GPIOPinNum num;
+  GPIOResistorState resistor_state;
+  GPIOSpeed speed;
+  uint8_t alternate_function;
 };

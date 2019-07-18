@@ -31,6 +31,7 @@ static std::deque<uint8_t> uart2_rx_queue;
 DMAConfig uart2_dma_config;
 
 extern StatusCode get_status_code(HAL_StatusTypeDef status);
+extern const char* get_uart_error_code(uint32_t code);
 void USART2_DMA_ErrorCallback(DMA_HandleTypeDef *dma);
 
 bool UARTPort::is_valid_port() {
@@ -48,14 +49,14 @@ UARTPort::UARTPort(UARTPortNum port, UARTSettings settings) {
 							 GPIO_ALT_PP,
 							 GPIO_STATE_LOW,
 							 GPIO_RES_PULLUP,
-							 GPIO_SPEED_HIGH,
+							 GPIO_FREQ_HIGH,
 							 GPIO_AF0_USART1);
 			tx_pin = GPIOPin(UART1_TX_PORT,
 							 UART1_TX_PIN,
 							 GPIO_ALT_PP,
 							 GPIO_STATE_LOW,
 							 GPIO_RES_PULLUP,
-							 GPIO_SPEED_HIGH,
+							 GPIO_FREQ_HIGH,
 							 GPIO_AF0_USART1);
 			huart1.Instance = USART1;
 			this->interface_handle = &huart1;
@@ -67,14 +68,14 @@ UARTPort::UARTPort(UARTPortNum port, UARTSettings settings) {
 							 GPIO_ALT_PP,
 							 GPIO_STATE_LOW,
 							 GPIO_RES_PULLUP,
-							 GPIO_SPEED_HIGH,
+							 GPIO_FREQ_HIGH,
 							 GPIO_AF1_USART2);
 			tx_pin = GPIOPin(UART2_TX_PORT,
 							 UART2_TX_PIN,
 							 GPIO_ALT_PP,
 							 GPIO_STATE_LOW,
 							 GPIO_RES_PULLUP,
-							 GPIO_SPEED_HIGH,
+							 GPIO_FREQ_HIGH,
 							 GPIO_AF1_USART2);
 			huart2.Instance = USART2;
 			this->interface_handle = &huart2;
@@ -228,7 +229,9 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart) {
 	if (huart->Instance == USART1) {
 		error("USART1 Error received", huart->ErrorCode);
 	} else if (huart->Instance == USART2) {
-		error("USART2 Error received", huart->ErrorCode);
+		char buffer[50];
+		sprintf(buffer, "USART2 Error received. Code: %lu Type: %s", huart->ErrorCode, get_uart_error_code(huart->ErrorCode));
+		error(buffer);
 		uart2_dma_config.reset = true;
 	} else {
 		error("Unknown USART port got an error callback");
